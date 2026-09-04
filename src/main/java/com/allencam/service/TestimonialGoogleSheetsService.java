@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +42,7 @@ public class TestimonialGoogleSheetsService {
         Sheets sheets = getSheetsClient();
 
         // Target sheet name and cell range (adjust "Sheet1" or column letters to match your sheet)
-        String range = "Sheet1!A2:E"; // Assuming row 1 is the header
+        String range = "Form Responses 1!A2:I"; // Assuming row 1 is the header
 
         ValueRange response = sheets.spreadsheets().values()
                 .get(spreadsheetId, range)
@@ -55,19 +56,22 @@ public class TestimonialGoogleSheetsService {
         }
 
         for (List<Object> row : rows) {
-            // Safe index checking to avoid IndexOutOfBoundsException on empty cells
             String timestamp = getCell(row, 0);
-            String name = getCell(row, 1);
-            String testimonial = getCell(row, 2);
-            String rating = getCell(row, 3);
-            String approved = getCell(row, 4);
+            String testimonialId = getCell(row, 1);
+            String firstName = getCell(row, 2);
+            String lastName = getCell(row, 3);
+            LocalDate dateOfService = LocalDate.parse(getCell(row, 4));
+            Integer rating = Integer.valueOf(getCell(row, 5));
+            String message = getCell(row, 6);
+            String email = getCell(row, 7);
+            boolean approved = Boolean.parseBoolean(getCell(row, 8));
 
             // Filter on the backend: only include rows where Approved is TRUE
-            if ("TRUE".equalsIgnoreCase(approved)) {
-                results.add(new TestimonialDTO(timestamp, name, testimonial, rating));
+            if (approved) {
+                results.add(new TestimonialDTO(timestamp, testimonialId, firstName, lastName,
+                        dateOfService, rating, message, email, true));
             }
         }
-
         return results;
     }
 

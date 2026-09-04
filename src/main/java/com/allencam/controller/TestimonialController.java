@@ -1,7 +1,9 @@
 package com.allencam.controller;
 
+import com.allencam.dto.TestimonialDTO;
 import com.allencam.service.TestimonialGoogleSheetsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +16,7 @@ import static com.allencam.common.Constants.TESTIMONIAL_SHEET_ID;
 
 @RestController
 @RequestMapping("/testimonials")
+@CrossOrigin(origins = "http://localhost:5173")
 public class TestimonialController {
 
     private static final String SHEET_ID = TESTIMONIAL_SHEET_ID;
@@ -26,7 +29,7 @@ public class TestimonialController {
     }
 
     @GetMapping
-    public List<String> getTestimonials() throws GeneralSecurityException, IOException {
+    public List<TestimonialDTO> getTestimonials() throws GeneralSecurityException, IOException {
         return sheetsservice.getApprovedTestimonials(TESTIMONIAL_SHEET_ID);
     }
 }
