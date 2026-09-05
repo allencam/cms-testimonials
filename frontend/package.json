@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "setup-all": "npm install && npm install react react-dom && npm install -D @types/react @types/react-dom"
   },
   "devDependencies": {
     "@types/react": "^19.2.18",
